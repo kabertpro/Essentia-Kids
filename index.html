@@ -405,9 +405,10 @@
                 right: 0;
                 background: var(--naranja-primary);
                 flex-direction: column;
-                padding: 1rem;
-                gap: 0;
+                padding: 1.5rem 1rem;
+                gap: 0.5rem;
                 display: none;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             }
 
             .nav-links.active {
@@ -635,8 +636,7 @@
         let html5QrCode;
         let currentProductId = null;
 
-
-// Navegación
+        // Navegación
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -731,7 +731,18 @@
                 { facingMode: "environment" },
                 { fps: 10, qrbox: { width: 250, height: 250 } },
                 (decodedText) => {
-                    const productId = decodedText.split('/').pop().split('?')[0];
+                    // El QR puede contener solo el ID del producto o una URL completa
+                    let productId = decodedText;
+                    
+                    // Si es una URL, extraer el ID del producto
+                    if (decodedText.includes('product=')) {
+                        const urlParams = new URLSearchParams(decodedText.split('?')[1]);
+                        productId = urlParams.get('product');
+                    } else if (decodedText.includes('/')) {
+                        // Si es una ruta, tomar la última parte
+                        productId = decodedText.split('/').pop();
+                    }
+                    
                     const product = products.find(p => p.id === productId);
                     
                     if (product) {
@@ -739,7 +750,7 @@
                         stopScanner();
                         setTimeout(() => showProductDetail(productId), 1000);
                     } else {
-                        message.innerHTML = '<div class="message error">❌ Código QR no reconocido</div>';
+                        message.innerHTML = `<div class="message error">❌ Código QR no válido. Asegúrate de usar un QR de Essentia Kids.</div>`;
                     }
                 }
             ).catch(err => {
@@ -777,12 +788,30 @@
         // Inicializar
         displayProducts();
 
+        // Verificar si se accedió mediante QR (parámetro en la URL)
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('product');
+            
+            if (productId) {
+                const product = products.find(p => p.id === productId);
+                if (product) {
+                    showProductDetail(productId);
+                }
+            }
+        });
+
         // Instrucciones para generar QR
         console.log('=== CÓDIGOS QR PARA PRODUCTOS ===');
-        console.log('Genera códigos QR con estas URLs:');
+        console.log('Genera códigos QR con estas URLs (cada QR debe tener su propia URL):');
+        console.log('');
         products.forEach(p => {
-            console.log(`${p.name}: ${window.location.origin}${window.location.pathname}?product=${p.id}`);
+            console.log(`📦 ${p.name}:`);
+            console.log(`   ${window.location.origin}${window.location.pathname}?product=${p.id}`);
+            console.log('');
         });
+        console.log('Cada QR debe apuntar a una URL diferente para redirigir al producto correcto.');
+        console.log('Puedes generar los QR en: qr-code-generator.com o qrcode-monkey.com');
     </script>
 </body>
 </html>
