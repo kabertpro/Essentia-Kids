@@ -244,6 +244,12 @@
             font-size: 5rem;
         }
 
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         .product-info {
             padding: 1.5rem;
         }
@@ -288,6 +294,13 @@
             align-items: center;
             justify-content: center;
             font-size: 8rem;
+        }
+
+        .product-detail-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
         }
 
         .product-detail-info h2 {
@@ -593,43 +606,78 @@
                 id: 'citrus-dream',
                 name: 'Sueño Cítrico',
                 emoji: '🍊',
-                price: '$12.99',
+                price: '10 Bs.',
                 description: 'Una explosión de energía con notas de naranja y mandarina que te transporta a un jardín soleado lleno de árboles frutales.'
             },
             {
                 id: 'vanilla-cloud',
                 name: 'Nube de Vainilla',
                 emoji: '☁️',
-                price: '$14.99',
+                price: '10 Bs.',
                 description: 'Suave y reconfortante, como flotar en una nube dulce. Perfecta para crear un ambiente acogedor y relajante.'
             },
             {
                 id: 'forest-magic',
                 name: 'Magia del Bosque',
                 emoji: '🌲',
-                price: '$13.99',
+                price: '10 Bs.',
                 description: 'Aromas frescos y naturales de pino y hierbas que te llevan a un paseo por el bosque encantado.'
             },
             {
                 id: 'ocean-breeze',
                 name: 'Brisa Marina',
                 emoji: '🌊',
-                price: '$13.50',
+                price: '10 Bs.',
                 description: 'Frescura del océano con toques de sal marina y algas. Cierra los ojos y escucha las olas del mar.'
             },
             {
                 id: 'lavender-sunset',
                 name: 'Atardecer de Lavanda',
                 emoji: '🌸',
-                price: '$15.99',
+                price: '10 Bs.',
                 description: 'Calma y serenidad con lavanda francesa pura. Ideal para relajarse después de un día de aventuras.'
             },
             {
                 id: 'honey-garden',
                 name: 'Jardín de Miel',
                 emoji: '🍯',
-                price: '$14.50',
+                price: '10 Bs.',
                 description: 'Dulce y floral, como caminar por un jardín lleno de flores visitadas por abejas laboriosas.'
+            },
+            {
+                id: 'brisa-de-cedron',
+                name: 'Brisa de Cedrón',
+                image: 'brisadecedron.jpg',
+                price: '10 Bs.',
+                description: 'Una brisa refrescante con notas herbales de cedrón que evoca la frescura de un jardín matutino.'
+            },
+            {
+                id: 'jazmin',
+                name: 'Jazmin',
+                image: 'jazmin.jpg',
+                price: '10 Bs.',
+                description: 'Aroma floral intenso y exótico de jazmín, perfecto para una experiencia romántica y cautivadora.'
+            },
+            {
+                id: 'gardenia',
+                name: 'Gardenia',
+                image: 'gardenia.jpg',
+                price: '10 Bs.',
+                description: 'Fragancia dulce y cremosa de gardenia, que transporta a un paraíso tropical lleno de flores exuberantes.'
+            },
+            {
+                id: 'rose',
+                name: 'Rose',
+                image: 'rose.jpg',
+                price: '10 Bs.',
+                description: 'Clásica y elegante esencia de rosas frescas, simbolizando amor y belleza en cada gota.'
+            },
+            {
+                id: 'sanadora-lavanda',
+                name: 'Sanadora Lavanda',
+                image: 'sanadoralavanda.jpg',
+                price: '10 Bs.',
+                description: 'Lavanda pura con propiedades calmantes, ideal para relajar la mente y sanar el espíritu.'
             }
         ];
 
@@ -672,7 +720,9 @@
             const grid = document.getElementById('productsGrid');
             grid.innerHTML = products.map(product => `
                 <div class="product-card" onclick="showProductDetail('${product.id}')">
-                    <div class="product-image">${product.emoji}</div>
+                    <div class="product-image">
+                        ${product.image ? `<img src="${product.image}" alt="${product.name}">` : product.emoji}
+                    </div>
                     <div class="product-info">
                         <h3>${product.name}</h3>
                         <p>${product.description.substring(0, 80)}...</p>
@@ -692,7 +742,9 @@
             
             detailContent.innerHTML = `
                 <div class="product-detail-content">
-                    <div class="product-detail-image">${product.emoji}</div>
+                    <div class="product-detail-image">
+                        ${product.image ? `<img src="${product.image}" alt="${product.name}">` : product.emoji}
+                    </div>
                     <div class="product-detail-info">
                         <h2>${product.name}</h2>
                         <div class="price">${product.price}</div>
